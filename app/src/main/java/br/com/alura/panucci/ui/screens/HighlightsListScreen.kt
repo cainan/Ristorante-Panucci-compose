@@ -1,7 +1,12 @@
 package br.com.alura.panucci.ui.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
@@ -23,8 +28,8 @@ fun HighlightsListScreen(
     modifier: Modifier = Modifier,
     title: String = "Destaques do dia",
     products: List<Product> = emptyList(),
-    onOrderClick: () -> Unit = {},
-    onProductClick: () -> Unit = {}
+    onNavigateToDetails: () -> Unit = {},
+    onNavigateToCheckout: () -> Unit = {},
 ) {
     Column(
         modifier
@@ -51,9 +56,9 @@ fun HighlightsListScreen(
                 HighlightProductCard(
                     product = p,
                     Modifier.clickable {
-                        onProductClick()
+                        onNavigateToDetails()
                     },
-                    onOrderClick = onOrderClick
+                    onOrderClick = onNavigateToCheckout
                 )
             }
         }
