@@ -57,6 +57,18 @@ class MainActivity : ComponentActivity() {
 
                         mutableStateOf(item)
                     }
+
+                    val isShowAppBars = currentDestination?.let { destination ->
+                        bottomAppBarItems.find {
+                            it.destination.route == destination.route
+                        }
+                    } != null
+
+                    val isShowFab = when (currentDestination?.route) {
+                        AppDestinations.Menu.route, AppDestinations.Drinks.route -> true
+                        else -> false
+                    }
+
                     PanucciApp(
                         bottomAppBarItemSelected = selectedItem,
                         onBottomAppBarItemSelectedChange = {
@@ -68,6 +80,9 @@ class MainActivity : ComponentActivity() {
                         onFabClick = {
                             navController.navigate(AppDestinations.Checkout.route)
                         },
+                        isShowTopAppBar = isShowAppBars,
+                        isShowBottomAppBar = isShowAppBars,
+                        isShowFab = isShowFab,
                         content = {
                             NavHost(
                                 navController = navController,
@@ -125,31 +140,40 @@ fun PanucciApp(
     bottomAppBarItemSelected: BottomAppBarItem = bottomAppBarItems.first(),
     onBottomAppBarItemSelectedChange: (BottomAppBarItem) -> Unit = {},
     onFabClick: () -> Unit = {},
+    isShowTopAppBar: Boolean = false,
+    isShowBottomAppBar: Boolean = false,
+    isShowFab: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(text = "Ristorante Panucci")
-                },
-            )
+            if (isShowTopAppBar) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(text = "Ristorante Panucci")
+                    },
+                )
+            }
         },
         bottomBar = {
-            PanucciBottomAppBar(
-                item = bottomAppBarItemSelected,
-                items = bottomAppBarItems,
-                onItemChange = onBottomAppBarItemSelectedChange,
-            )
+            if (isShowBottomAppBar) {
+                PanucciBottomAppBar(
+                    item = bottomAppBarItemSelected,
+                    items = bottomAppBarItems,
+                    onItemChange = onBottomAppBarItemSelectedChange,
+                )
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onFabClick
-            ) {
-                Icon(
-                    Icons.Filled.PointOfSale,
-                    contentDescription = null
-                )
+            if (isShowFab) {
+                FloatingActionButton(
+                    onClick = onFabClick
+                ) {
+                    Icon(
+                        Icons.Filled.PointOfSale,
+                        contentDescription = null
+                    )
+                }
             }
         }
     ) {
