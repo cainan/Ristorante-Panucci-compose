@@ -2,6 +2,7 @@ package br.com.alura.panucci.navigation
 
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -10,16 +11,21 @@ import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
 
 
+private const val productDetailsRoute = "productDetails"
+private const val productIdArgument = "productId"
+private const val promoCodeParameter = "promoCode"
+
 fun NavGraphBuilder.productDetailsNavScreen(navController: NavHostController) {
     composable(
-        "${AppDestinations.ProductDetails.route}/{productId}?promoCode={promoCode}",
+        "$productDetailsRoute/{$productIdArgument}?promoCode={$promoCodeParameter}",
         arguments = listOf(navArgument("promoCode") { nullable = true })
     ) { navBackStack ->
-        val productId = navBackStack.arguments?.getString("productId")
-        val promoCode = navBackStack.arguments?.getString("promoCode")
+        val productId = navBackStack.arguments?.getString(productIdArgument)
+        val promoCode = navBackStack.arguments?.getString(promoCodeParameter)
 
+        Log.i("MainActivity", "promoCode: $promoCode")
+        Log.i("MainActivity", "productId: $productId")
 
-        Log.i("MainActivity", "onCreate: productId: $productId")
         sampleProducts.find {
             it.id == productId
         }?.let { product ->
@@ -28,14 +34,22 @@ fun NavGraphBuilder.productDetailsNavScreen(navController: NavHostController) {
                 Log.i("MainActivity", "Getting 10% discount")
             }
 
-            Log.i("MainActivity", "onCreate: product: $product")
             ProductDetailsScreen(
                 product = product,
                 onNavigateToCheckout = {
-                    navController.navigate(AppDestinations.Checkout.route)
+                    navController.navigateToCheckout()
                 })
+
         } ?: LaunchedEffect(Unit) {
             navController.navigateUp()
         }
     }
+}
+
+fun NavController.navigateToProductDetails(id: String) {
+    navigate("$productDetailsRoute/$id")
+}
+
+fun NavController.navigateToProductDetails(id: String, promoCode2: String) {
+    navigate("$productDetailsRoute/$id?promoCode=$promoCode2")
 }

@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 fun PanucciNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.Highlights.route,
+        startDestination = highlightsRoute,
     ) {
         highlightsNavScreen(navController)
         menuNavScreen(navController)
