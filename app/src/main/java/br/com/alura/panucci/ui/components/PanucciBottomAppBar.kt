@@ -1,5 +1,9 @@
 package br.com.alura.panucci.ui.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.RestaurantMenu
+import androidx.compose.material.icons.outlined.LocalBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -8,15 +12,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import br.com.alura.panucci.navigation.AppDestinations
-import br.com.alura.panucci.navigation.bottomAppBarItems
 import br.com.alura.panucci.ui.theme.PanucciTheme
 
-class BottomAppBarItem(
+sealed class BottomAppBarItem(
     val label: String,
     val icon: ImageVector,
-    val destination: AppDestinations,
-)
+) {
+    object HighlightList : BottomAppBarItem(
+        label = "Destaques",
+        icon = Icons.Filled.AutoAwesome,
+    )
+
+    object MenuList : BottomAppBarItem(
+        label = "Menu",
+        icon = Icons.Filled.RestaurantMenu,
+    )
+
+    object DrinksList : BottomAppBarItem(
+        label = "Bebidas",
+        icon = Icons.Outlined.LocalBar,
+    )
+}
 
 @Composable
 fun PanucciBottomAppBar(
@@ -41,12 +57,18 @@ fun PanucciBottomAppBar(
     }
 }
 
+val bottomAppBarItems = listOf(
+    BottomAppBarItem.HighlightList,
+    BottomAppBarItem.MenuList,
+    BottomAppBarItem.DrinksList
+)
+
 @Preview
 @Composable
 fun PanucciBottomAppBarPreview() {
     PanucciTheme {
         PanucciBottomAppBar(
-            item = bottomAppBarItems.first(),
+            item = BottomAppBarItem.MenuList,
             items = bottomAppBarItems
         )
     }

@@ -13,13 +13,22 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.panucci.navigation.AppDestinations
+import androidx.navigation.navOptions
 import br.com.alura.panucci.navigation.PanucciNavHost
-import br.com.alura.panucci.navigation.bottomAppBarItems
+import br.com.alura.panucci.navigation.drinksRoute
+import br.com.alura.panucci.navigation.highlightsRoute
+import br.com.alura.panucci.navigation.menuRoute
+import br.com.alura.panucci.navigation.navigateSingleTopWithPopUpTo
+import br.com.alura.panucci.navigation.navigateToCheckout
+import br.com.alura.panucci.navigation.navigateToDrinks
+import br.com.alura.panucci.navigation.navigateToHighlights
+import br.com.alura.panucci.navigation.navigateToMenu
 import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
+import br.com.alura.panucci.ui.components.bottomAppBarItems
 import br.com.alura.panucci.ui.screens.*
 import br.com.alura.panucci.ui.theme.PanucciTheme
 
@@ -45,38 +54,42 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val currentRoute = currentDestination?.route
+
                     var selectedItem by remember(currentDestination) {
 
-                        val item = currentDestination?.let { destination ->
-                            bottomAppBarItems.find {
-                                it.destination.route == destination.route
-                            }
-                        } ?: bottomAppBarItems.first()
+
+                        val item = when (currentRoute) {
+                            highlightsRoute -> BottomAppBarItem.HighlightList
+                            menuRoute -> BottomAppBarItem.MenuList
+                            drinksRoute -> BottomAppBarItem.DrinksList
+                            else -> BottomAppBarItem.HighlightList
+                        }
 
                         mutableStateOf(item)
                     }
 
-                    val isShowAppBars = currentDestination?.let { destination ->
-                        bottomAppBarItems.find {
-                            it.destination.route == destination.route
-                        }
-                    } != null
+                    val isShowAppBars = when (currentRoute) {
+                        highlightsRoute, menuRoute, drinksRoute -> true
+                        else -> false
+                    }
 
-                    val isShowFab = when (currentDestination?.route) {
-                        AppDestinations.Menu.route, AppDestinations.Drinks.route -> true
+                    val isShowFab = when (currentRoute) {
+                        menuRoute, drinksRoute -> true
                         else -> false
                     }
 
                     PanucciApp(
                         bottomAppBarItemSelected = selectedItem,
                         onBottomAppBarItemSelectedChange = {
-                            navController.navigate(it.destination.route) {
-                                launchSingleTop = true
-                                popUpTo(it.destination.route)
-                            }
+//                            navController.navigate(it.destination) {
+//                                launchSingleTop = true
+//                                popUpTo(it.destination)
+//                            }
+                            navController.navigateSingleTopWithPopUpTo(it)
                         },
                         onFabClick = {
-                            navController.navigate(AppDestinations.Checkout.route)
+                            navController.navigateToCheckout()
                         },
                         isShowTopAppBar = isShowAppBars,
                         isShowBottomAppBar = isShowAppBars,
@@ -89,7 +102,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
