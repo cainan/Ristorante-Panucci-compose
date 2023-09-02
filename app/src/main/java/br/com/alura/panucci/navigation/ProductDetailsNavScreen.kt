@@ -2,13 +2,16 @@ package br.com.alura.panucci.navigation
 
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
+import br.com.alura.panucci.ui.viewmodels.ProductDetailsViewModel
 
 
 private const val productDetailsRoute = "productDetails"
@@ -20,26 +23,31 @@ fun NavGraphBuilder.productDetailsNavScreen(navController: NavHostController) {
         "$productDetailsRoute/{$productIdArgument}?promoCode={$promoCodeParameter}",
         arguments = listOf(navArgument("promoCode") { nullable = true })
     ) { navBackStack ->
+
+        val viewModel = viewModel<ProductDetailsViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+
         val productId = navBackStack.arguments?.getString(productIdArgument)
         val promoCode = navBackStack.arguments?.getString(promoCodeParameter)
 
         Log.i("MainActivity", "promoCode: $promoCode")
         Log.i("MainActivity", "productId: $productId")
 
-        sampleProducts.find {
-            it.id == productId
-        }?.let { product ->
+        if (promoCode == "ALURA") {
+            Log.i("MainActivity", "Getting 10% discount")
+        }
 
-            if (promoCode == "ALURA") {
-                Log.i("MainActivity", "Getting 10% discount")
+        productId?.let {
+            LaunchedEffect(key1 = Unit) {
+                viewModel.findProductById(productId)
             }
 
             ProductDetailsScreen(
-                product = product,
+                uiState = uiState,
                 onNavigateToCheckout = {
                     navController.navigateToCheckout()
-                })
-
+                }
+            )
         } ?: LaunchedEffect(Unit) {
             navController.navigateUp()
         }
