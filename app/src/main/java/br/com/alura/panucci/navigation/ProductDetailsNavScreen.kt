@@ -46,6 +46,12 @@ fun NavGraphBuilder.productDetailsNavScreen(navController: NavHostController) {
                 uiState = uiState,
                 onNavigateToCheckout = {
                     navController.navigateToCheckout()
+                },
+                onRetrySearch = {
+                    viewModel.findProductById(productId)
+                },
+                onBackStack = {
+                    navController.popBackStack()
                 }
             )
         } ?: LaunchedEffect(Unit) {
