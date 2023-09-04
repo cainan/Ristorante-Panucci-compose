@@ -28,8 +28,8 @@ import br.com.alura.panucci.ui.uistate.MenuListUiState
 fun MenuListScreen(
     modifier: Modifier = Modifier,
     title: String = "Menu",
-    onNavigateToDetails: (Product) -> Unit = {},
     uiState: MenuListUiState = MenuListUiState(),
+    onProductClick: (Product) -> Unit = {},
 ) {
     val products = uiState.products
     Column(
@@ -55,7 +55,7 @@ fun MenuListScreen(
             items(products) { p ->
                 MenuProductCard(
                     product = p,
-                    Modifier.clickable { onNavigateToDetails(p) }
+                    Modifier.clickable { onProductClick(p) }
                 )
             }
         }
@@ -68,7 +68,7 @@ fun MenuListScreenPreview() {
     PanucciTheme {
         Surface {
             MenuListScreen(
-                uiState = MenuListUiState(products = sampleProducts)
+                uiState = MenuListUiState(products = sampleProducts),
             )
         }
     }

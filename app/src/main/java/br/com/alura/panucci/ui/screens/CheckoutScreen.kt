@@ -39,7 +39,7 @@ import br.com.alura.panucci.ui.uistate.CheckoutUiState
 @Composable
 fun CheckoutScreen(
     modifier: Modifier = Modifier,
-    onPopBackStack: () -> Unit = {},
+    onOrderClick: () -> Unit = {},
     uiState: CheckoutUiState = CheckoutUiState(),
 ) {
     val products = uiState.products
@@ -143,7 +143,7 @@ fun CheckoutScreen(
             }
         }
         Button(
-            onClick = { onPopBackStack() },
+            onClick = { onOrderClick() },
             Modifier
                 .padding(
                     16.dp

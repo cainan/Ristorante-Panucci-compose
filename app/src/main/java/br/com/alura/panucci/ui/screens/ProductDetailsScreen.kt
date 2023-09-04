@@ -35,9 +35,9 @@ import coil.compose.AsyncImage
 fun ProductDetailsScreen(
     uiState: ProductDetailsUiState,
     modifier: Modifier = Modifier,
-    onNavigateToCheckout: () -> Unit = {},
+    onOrderClick: () -> Unit = {},
     onRetrySearch: () -> Unit = {},
-    onBackStack: () -> Unit = {},
+    onBackClick: () -> Unit = {},
 ) {
     when (uiState) {
         ProductDetailsUiState.Failure -> {
@@ -52,7 +52,7 @@ fun ProductDetailsScreen(
                     Text(text = "Tentar Novamente")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                TextButton(onClick = { onBackStack() }) {
+                TextButton(onClick = { onBackClick() }) {
                     Text(text = "Voltar")
                 }
             }
@@ -92,7 +92,7 @@ fun ProductDetailsScreen(
                     Text(product.price.toPlainString(), fontSize = 18.sp)
                     Text(product.description)
                     Button(
-                        onClick = { onNavigateToCheckout() },
+                        onClick = { onOrderClick() },
                         Modifier
                             .fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)

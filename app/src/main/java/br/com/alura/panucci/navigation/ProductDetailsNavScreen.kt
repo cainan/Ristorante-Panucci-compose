@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
@@ -18,7 +17,10 @@ private const val productDetailsRoute = "productDetails"
 private const val productIdArgument = "productId"
 private const val promoCodeParameter = "promoCode"
 
-fun NavGraphBuilder.productDetailsNavScreen(navController: NavHostController) {
+fun NavGraphBuilder.productDetailsNavScreen(
+    onNavigateToCheckout: () -> Unit,
+    onPopBackStack: () -> Unit,
+) {
     composable(
         "$productDetailsRoute/{$productIdArgument}?promoCode={$promoCodeParameter}",
         arguments = listOf(navArgument("promoCode") { nullable = true })
@@ -44,18 +46,14 @@ fun NavGraphBuilder.productDetailsNavScreen(navController: NavHostController) {
 
             ProductDetailsScreen(
                 uiState = uiState,
-                onNavigateToCheckout = {
-                    navController.navigateToCheckout()
-                },
+                onOrderClick = onNavigateToCheckout,
                 onRetrySearch = {
                     viewModel.findProductById(productId)
                 },
-                onBackStack = {
-                    navController.popBackStack()
-                }
+                onBackClick = onPopBackStack
             )
         } ?: LaunchedEffect(Unit) {
-            navController.navigateUp()
+            onPopBackStack()
         }
     }
 }
