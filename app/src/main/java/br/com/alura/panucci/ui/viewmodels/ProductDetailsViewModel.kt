@@ -27,7 +27,8 @@ class ProductDetailsViewModel(
 
     private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Loading)
     val uiState = _uiState.asStateFlow()
-    var discount = BigDecimal.ZERO
+
+    private var discount: BigDecimal = BigDecimal.ZERO
 
     init {
         viewModelScope.launch {
