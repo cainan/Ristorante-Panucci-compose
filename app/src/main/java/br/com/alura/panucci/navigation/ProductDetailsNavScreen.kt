@@ -8,22 +8,28 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
 import br.com.alura.panucci.ui.viewmodels.ProductDetailsViewModel
 
 
 private const val productDetailsRoute = "productDetails"
 internal const val productIdArgument = "productId"
-private const val promoCodeParameter = "promoCode"
+internal const val promoCodeParameter = "promoCode"
+
+// alura://panucci.com.br/productDetails/9adccd9a-3918-4996-8c96-2f5b9143cef2?promoCode=PANUCCI10
+// adb shell am start alura://panucci.com.br/productDetails/9adccd9a-3918-4996-8c96-2f5b9143cef2?promoCode=PANUCCI10
 
 fun NavGraphBuilder.productDetailsNavScreen(
     onNavigateToCheckout: () -> Unit,
     onPopBackStack: () -> Unit,
 ) {
     composable(
-        "$productDetailsRoute/{$productIdArgument}?promoCode={$promoCodeParameter}",
-        arguments = listOf(navArgument("promoCode") { nullable = true })
+        route = "$productDetailsRoute/{$productIdArgument}?$promoCodeParameter={$promoCodeParameter}",
+        deepLinks = listOf(navDeepLink {
+            uriPattern =
+                "$uri/$productDetailsRoute/{$productIdArgument}?$promoCodeParameter={$promoCodeParameter}"
+        }),
     ) { navBackStack ->
 
         val viewModel =
@@ -36,9 +42,14 @@ fun NavGraphBuilder.productDetailsNavScreen(
         Log.i("MainActivity", "promoCode: $promoCode")
         Log.i("MainActivity", "productId: $productId")
 
-        if (promoCode == "ALURA") {
-            Log.i("MainActivity", "Getting 10% discount")
+        when (promoCode) {
+            "ALURA" ->
+                Log.i("MainActivity", "Getting 5% discount")
+
+            "PANUCCI10" ->
+                Log.i("MainActivity", "Getting 10% discount")
         }
+
 
         productId?.let {
             ProductDetailsScreen(
