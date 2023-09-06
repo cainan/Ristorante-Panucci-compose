@@ -14,7 +14,7 @@ import br.com.alura.panucci.ui.viewmodels.ProductDetailsViewModel
 
 
 private const val productDetailsRoute = "productDetails"
-private const val productIdArgument = "productId"
+internal const val productIdArgument = "productId"
 private const val promoCodeParameter = "promoCode"
 
 fun NavGraphBuilder.productDetailsNavScreen(
@@ -26,7 +26,8 @@ fun NavGraphBuilder.productDetailsNavScreen(
         arguments = listOf(navArgument("promoCode") { nullable = true })
     ) { navBackStack ->
 
-        val viewModel = viewModel<ProductDetailsViewModel>()
+        val viewModel =
+            viewModel<ProductDetailsViewModel>(factory = ProductDetailsViewModel.Factory)
         val uiState by viewModel.uiState.collectAsState()
 
         val productId = navBackStack.arguments?.getString(productIdArgument)
@@ -40,10 +41,6 @@ fun NavGraphBuilder.productDetailsNavScreen(
         }
 
         productId?.let {
-            LaunchedEffect(key1 = Unit) {
-                viewModel.findProductById(productId)
-            }
-
             ProductDetailsScreen(
                 uiState = uiState,
                 onOrderClick = onNavigateToCheckout,

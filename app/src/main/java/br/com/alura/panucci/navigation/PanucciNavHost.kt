@@ -26,6 +26,10 @@ fun PanucciNavHost(navController: NavHostController) {
                 navController.navigateUp()
             })
         checkoutNavScreen(onPopBackStack = {
+            navController.currentBackStackEntry?.savedStateHandle?.set(
+                "order_done",
+                "Pedido feito com Sucesso"
+            )
             navController.navigateUp()
         })
     }
