@@ -232,4 +232,25 @@ class NavigationTest {
         val route = navController.currentBackStackEntry?.destination?.route
         Assert.assertEquals(route, checkoutRoute)
     }
+
+    @Test
+    fun appNavHost_verifyIfSnackbarIsDisplayedWhenFinishTheOrder() {
+        // TODO
+    }
+
+    @Test
+    fun appNavHost_verifyIfFabIsDisplayedOnlyInMenuOrDrinksDestination() {
+        // TODO
+    }
+
+    @Test
+    fun appNavHost_verifyIfBottomAppBarIsDisplayedOnlyInHomeGraphNavigation() {
+        // TODO
+    }
+
+    @Test
+    fun appNavHost_verifyIfTopAppBarIsDisplayedOnlyInHomeGraphNavigation() {
+        // TODO
+    }
+
 }
