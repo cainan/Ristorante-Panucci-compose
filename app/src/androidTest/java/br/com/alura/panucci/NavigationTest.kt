@@ -11,6 +11,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import br.com.alura.panucci.navigation.drinksRoute
+import br.com.alura.panucci.navigation.highlightsRoute
 import br.com.alura.panucci.navigation.menuRoute
 import org.junit.Assert
 import org.junit.Before
@@ -52,4 +54,25 @@ class NavigationTest {
         Assert.assertEquals(route, menuRoute)
     }
 
+    @Test
+    fun appNavHost_verifyIfDrinksScreenIsDisplayed() {
+        composeTestRule.onRoot().printToLog("PannucciApp")
+        composeTestRule.onNodeWithText("Bebidas").performClick()
+
+        composeTestRule.onAllNodesWithText("Bebidas").assertCountEquals(2)
+
+        val route = navController.currentBackStackEntry?.destination?.route
+        Assert.assertEquals(route, drinksRoute)
+    }
+
+    @Test
+    fun appNavHost_verifyIfHighlightScreenIsDisplayed() {
+        composeTestRule.onRoot().printToLog("PannucciApp")
+        composeTestRule.onNodeWithText("Destaques").performClick()
+
+        composeTestRule.onAllNodesWithText("Destaques do dia").assertCountEquals(1)
+
+        val route = navController.currentBackStackEntry?.destination?.route
+        Assert.assertEquals(route, highlightsRoute)
+    }
 }
