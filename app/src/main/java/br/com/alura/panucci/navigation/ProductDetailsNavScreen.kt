@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -13,7 +16,7 @@ import br.com.alura.panucci.ui.screens.ProductDetailsScreen
 import br.com.alura.panucci.ui.viewmodels.ProductDetailsViewModel
 
 
-private const val productDetailsRoute = "productDetails"
+internal const val productDetailsRoute = "productDetails"
 internal const val productIdArgument = "productId"
 internal const val promoCodeParameter = "promoCode"
 
